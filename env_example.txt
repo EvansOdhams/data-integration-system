@@ -1,0 +1,11 @@
+# Supabase Configuration
+# Copy this file to .env and fill in your Supabase credentials
+# Get these values from your Supabase project settings
+
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_KEY=your-anon-key-here
+
+# Optional: Direct PostgreSQL connection URL
+# Format: postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres:password@db.projectref.supabase.co:5432/postgres
+

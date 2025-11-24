@@ -1,0 +1,17 @@
+product_id,product_name,description,price,stock_quantity,category,supplier
+101,Laptop Pro 15,High-performance laptop with 16GB RAM and 512GB SSD,1299.99,25,Electronics,TechCorp Inc.
+102,Wireless Mouse,Ergonomic wireless mouse with Bluetooth connectivity,29.99,150,Electronics,TechCorp Inc.
+103,Mechanical Keyboard,RGB mechanical keyboard with Cherry MX switches,89.99,75,Electronics,TechCorp Inc.
+104,Monitor 27",4K UHD 27-inch monitor with HDR support,399.99,40,Electronics,DisplayTech Ltd.
+105,USB-C Hub,7-in-1 USB-C hub with HDMI, USB 3.0, and SD card reader,49.99,200,Electronics,TechCorp Inc.
+201,Office Chair,Ergonomic office chair with lumbar support,299.99,30,Furniture,ComfortSeating Co.
+202,Desk Lamp,LED desk lamp with adjustable brightness,39.99,100,Furniture,LightWorks Inc.
+203,Standing Desk,Adjustable height standing desk 48x24 inches,599.99,15,Furniture,ComfortSeating Co.
+204,Monitor Stand,Aluminum monitor stand with cable management,79.99,60,Furniture,ComfortSeating Co.
+205,Desk Organizer,Multi-compartment desk organizer,24.99,120,Furniture,ComfortSeating Co.
+301,Notebook Set,Set of 3 premium notebooks with leather cover,34.99,80,Stationery,WriteWell Supplies
+302,Pen Set,Set of 5 premium ballpoint pens,19.99,200,Stationery,WriteWell Supplies
+303,Desk Calendar,2024 desk calendar with monthly views,12.99,150,Stationery,WriteWell Supplies
+304,Sticky Notes,Assorted color sticky notes pack of 10,8.99,300,Stationery,WriteWell Supplies
+305,File Folders,Set of 20 letter-size file folders,15.99,250,Stationery,WriteWell Supplies
+

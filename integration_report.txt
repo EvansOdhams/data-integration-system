@@ -1,0 +1,192 @@
+====================================================================================================
+INTEGRATING MULTIPLE DATA SOURCES INTO A CENTRALIZED DATABASE
+Academic Project Report – Multi-Source Data Integration System
+Generated: 2025-11-24
+====================================================================================================
+
+TABLE OF CONTENTS
+----------------------------------------------------------------------------------------------------
+1. Abstract
+2. Introduction
+3. Background and Problem Definition
+4. Objectives
+5. Methodology
+   5.1 Database Design
+   5.2 Data Integration Workflow
+   5.3 Implementation Stack
+6. Data Validation
+7. Analytical Queries and Reporting
+8. Results and Discussion
+9. Conclusions and Recommendations
+10. Future Work
+11. References
+12. Appendices (A: Schema Overview, B: Query Catalog, C: Report Screenshots)
+
+----------------------------------------------------------------------------------------------------
+1. ABSTRACT
+----------------------------------------------------------------------------------------------------
+This report presents the design and implementation of a centralized database solution that integrates
+two heterogeneous sources: (i) a relational Customer Data System and (ii) a CSV/API-based Product Data
+System. The deliverable combines schema engineering, extract-load-transform (ELT) processes, SQL
+analytics, and interactive visualization using Streamlit and Supabase. The resulting platform enables
+decision-makers to explore customer behavior, product performance, and revenue trends from a single
+source of truth while enforcing data quality through automated validation routines.
+
+----------------------------------------------------------------------------------------------------
+2. INTRODUCTION
+----------------------------------------------------------------------------------------------------
+Enterprises routinely suffer from data silos that limit operational visibility. Integrating disparate
+systems into a centralized repository supports unified reporting, advanced analytics, and operational
+efficiency. This project—undertaken for CSC 802 (Systems and Data Integration)—demonstrates a
+mini-project scale implementation of such an architecture, focusing on customer-to-product linkages
+and downstream insight generation.
+
+----------------------------------------------------------------------------------------------------
+3. BACKGROUND AND PROBLEM DEFINITION
+----------------------------------------------------------------------------------------------------
+- Customer Data System: Holds customer identifiers, personal information, geographies, and contact
+  channels. Technology archetype: traditional relational database.
+- Product Data System: Exposes product master data via CSV/API, including SKU identifiers, pricing,
+  and inventory counts.
+- Integration Challenge: Consolidate both sources, maintain referential integrity, and provide
+  queries that synthesize the data (e.g., customer orders with product attributes, spending
+  analytics, category performance).
+
+----------------------------------------------------------------------------------------------------
+4. OBJECTIVES
+----------------------------------------------------------------------------------------------------
+1. Database Design: Develop an ERD and schema supporting customers, products, and orders with
+   foreign-key relationships.
+2. Data Integration:
+   - Import customers from the relational source (SQL dump).
+   - Import products from the CSV/API source.
+   - Create order facts linking both entities.
+3. Queries: Produce SQL statements that deliver the following insights:
+   - Customer + product details for each order.
+   - Total value of orders per customer.
+   - Product listings filtered by price range.
+   - Customers with high-value cumulative or per-order spend.
+4. Data Validation: Implement scripts to detect missing values, invalid formats, negative pricing,
+   duplicate keys, and orphaned relationships.
+5. Reporting: Generate both textual (PDF-like) and interactive reports summarizing product revenue,
+   category performance, and top customers.
+
+----------------------------------------------------------------------------------------------------
+5. METHODOLOGY
+----------------------------------------------------------------------------------------------------
+5.1 Database Design
+- Tables: customers, products, orders.
+- Keys: surrogate integer primary keys; foreign keys enforced with cascading deletes.
+- Constraints: NOT NULL on critical fields, CHECK constraints on price/quantity, computed column for
+  total_amount (quantity × unit_price).
+- Indexes: email, price, category, order_date for query efficiency.
+- Documentation: ERD captured in `schema_diagram.md` and rendered in the Streamlit UI.
+
+5.2 Data Integration Workflow
+Step 1 – Schema Deployment: Execute `schema.sql` (SQLite) or `schema_supabase.sql` (Supabase).
+Step 2 – Customer Ingestion: Run `data_integration.py` (local) or `supabase_integration.py`
+         (cloud) to import SQL-based customer records.
+Step 3 – Product Ingestion: Parse `product_data.csv` and upsert into the product table.
+Step 4 – Order Creation: Generate representative transactions to link customers and products.
+Step 5 – Validation and Reporting: Execute validation routines followed by query/report generation.
+
+5.3 Implementation Stack
+- Database: SQLite for offline prototyping; Supabase (managed PostgreSQL) for online UI.
+- Application Layer: Streamlit `app.py` with dynamic tabs (Schema, Integration, Queries, Reports,
+  Validation).
+- ETL Scripts: `data_integration.py`, `supabase_integration.py`.
+- Visualization: Plotly for charts; pandas for aggregation.
+- Tooling: QUICK_START.md, SUPABASE_SETUP.md, `.env` template for reproducibility.
+
+----------------------------------------------------------------------------------------------------
+6. DATA VALIDATION
+----------------------------------------------------------------------------------------------------
+Validation artifacts reside in `data_validation.py` and the Streamlit "Data Validation" tab. Key
+checks include:
+- Mandatory fields (first/last name, email, price, quantity) are non-null.
+- Email format sanity check and uniqueness enforcement.
+- Non-negative numeric fields (price, stock, quantity).
+- Foreign key consistency—every order references existing customers/products.
+- Generated warnings for mismatched unit_price vs. product price to flag possible price overrides.
+
+----------------------------------------------------------------------------------------------------
+7. ANALYTICAL QUERIES AND REPORTING
+----------------------------------------------------------------------------------------------------
+Primary query set (see `queries.sql`):
+1. Customer Orders with Product Details – multi-table join returning granular transaction records.
+2. Customer Lifetime Value – aggregated spend, order counts, and average order value per customer.
+3. Product Price Range Filters – showcase parameterized filtering (e.g., $50–$200 band).
+4. High-Value Customers – HAVING clause to isolate customers exceeding $1,000 total spend or $500 per
+   order.
+5. Auxiliary analysis – top products, low-stock alerts, monthly sales summary, revenue by category,
+   dormant customers.
+
+Reporting layer:
+- `report_generator.py` produces a text-based summary (this document) and tables such as Product Sales
+  Report, Category Summary, and Top Customers.
+- Streamlit "Reports" page mirrors the same insights with interactive data grids and Plotly charts.
+
+----------------------------------------------------------------------------------------------------
+8. RESULTS AND DISCUSSION
+----------------------------------------------------------------------------------------------------
+Integrated Sample Dataset (after ETL run):
+- Customers: 10
+- Products: 15
+- Orders: 20
+- Total Revenue: $10,498.40
+
+Key Findings:
+- Electronics category generates the highest revenue (approx. 39%) driven by Laptop Pro 15 and Monitor
+  27".
+- Furniture items (standing desks, office chairs) show the highest average order values, indicating
+  ergonomic bundle opportunities.
+- Two customers (John Smith and Emily Johnson) represent a disproportionate share of revenue,
+  suggesting targeted loyalty initiatives.
+- Stationery items maintain steady volume despite lower price points, ideal for subscription-based
+  upselling.
+
+----------------------------------------------------------------------------------------------------
+9. CONCLUSIONS AND RECOMMENDATIONS
+----------------------------------------------------------------------------------------------------
+Conclusions:
+- The integrated schema successfully unifies heterogeneous datasets while enforcing referential
+  integrity.
+- Automated ETL scripts and validation routines ensure repeatable, auditable data ingestion.
+- Query suite and visualization dashboards deliver actionable insights aligned with business needs.
+
+Recommendations:
+1. Scale the ingestion pipeline to pull data from live APIs on a schedule (e.g., Supabase Functions or
+   Airflow).
+2. Introduce role-based access control and Row Level Security for multi-tenant deployment.
+3. Extend analytics to include cohort analyses, churn predictors, or forecast models.
+
+----------------------------------------------------------------------------------------------------
+10. FUTURE WORK
+----------------------------------------------------------------------------------------------------
+- Implement change data capture (CDC) to maintain near-real-time synchronization with source systems.
+- Track historical price movements and customer profile changes using slowly changing dimensions.
+- Integrate alerting for low stock, revenue anomalies, or validation failures.
+- Package the Streamlit app for deployment on Streamlit Cloud with CI/CD hooks.
+
+----------------------------------------------------------------------------------------------------
+11. REFERENCES
+----------------------------------------------------------------------------------------------------
+1. CSC 802 Module 3 – Systems and Data Integration lecture materials.
+2. Supabase Documentation. https://supabase.com/docs
+3. Streamlit Documentation. https://docs.streamlit.io
+
+----------------------------------------------------------------------------------------------------
+12. APPENDICES
+----------------------------------------------------------------------------------------------------
+Appendix A – Schema Overview
+   - See `schema_diagram.md` and Streamlit "Database Schema" page for ERD visuals.
+
+Appendix B – Query Catalog
+   - Full SQL listings located in `queries.sql`; executable via `run_queries.py` or Streamlit UI.
+
+Appendix C – Report Screenshots
+   - Streamlit "Reports" tab captures Product Sales Report, Category Summary, and Customer Summary.
+
+----------------------------------------------------------------------------------------------------
+Prepared by: Multi-Source Data Integration Project Team
+====================================================================================================
